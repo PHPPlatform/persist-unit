@@ -14,6 +14,7 @@ use PhpPlatform\Mock\Config\MockSettings;
 use PhpPlatform\Config\SettingsCache;
 use PhpPlatform\JSONCache\Cache;
 use PhpPlatform\Errors\ErrorHandler;
+use PhpPlatform\Persist\TransactionManager;
 
 abstract class ModelTest extends DBUnitTestcase{
 
@@ -26,6 +27,13 @@ abstract class ModelTest extends DBUnitTestcase{
      * @return string[] of schema sql files to run before tests
      */
     protected static function getSchemaFiles(){
+    	return array();
+    }
+    
+    /**
+     * @return string[] of schema sql files to run before tests
+     */
+    protected static function getDataFiles(){
     	return array();
     }
     
@@ -91,7 +99,7 @@ abstract class ModelTest extends DBUnitTestcase{
     	MockSettings::setSettings('php-platform/persist', "outputDateTimeFormat", "%Y-%m-%d %H:%i:%S");
     	
     	$logFile = getenv('sqlLogFile');
-    	if(!$logFile){
+    	if($logFile){
     		MockSettings::setSettings('php-platform/persist', "sqlLogFile", $logFile);
     	}
     	self::setTriggers(array());
@@ -111,6 +119,13 @@ abstract class ModelTest extends DBUnitTestcase{
     }
     
     public static function tearDownAfterClass(){
+    	
+    	$transaction = TransactionManager::$transaction;
+    	while ($transaction != null){
+    		TransactionManager::abortTransaction();
+    		$transaction = TransactionManager::$transaction;
+    	}
+    	
     	// create pdo without database
     	$_pdo = new PDO('mysql:host='.self::$_connectionParams['host'].';port='.self::$_connectionParams['port'], self::$_connectionParams['username'],self::$_connectionParams['password']);
     	 
@@ -122,6 +137,14 @@ abstract class ModelTest extends DBUnitTestcase{
     	}
     	unset($result);
     	unset($_pdo);
+    }
+    
+    public function getSetUpOperation()
+    {
+    	return new \PHPUnit_Extensions_Database_Operation_Composite(array(
+    			\PHPUnit_Extensions_Database_Operation_Factory::TRUNCATE(),
+    			new DBInsert()
+    	));
     }
 
     public function getConnection(){
@@ -143,7 +166,7 @@ abstract class ModelTest extends DBUnitTestcase{
 		$tmpFile = tempnam(sys_get_temp_dir(),self::$_databaseName);
 		file_put_contents($tmpFile,$seedContent);
 
-		return $this->createMySQLXMLDataSet($tmpFile);
+		return new DataSet(static::getDataFiles(), $tmpFile);
 	}
 	
 	public function getDatasetValue($table,$row,$column = null){
