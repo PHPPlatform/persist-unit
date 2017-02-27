@@ -14,7 +14,6 @@ use PhpPlatform\Mock\Config\MockSettings;
 use PhpPlatform\Config\SettingsCache;
 use PhpPlatform\JSONCache\Cache;
 use PhpPlatform\Errors\ErrorHandler;
-use PhpPlatform\Persist\TransactionManager;
 
 abstract class ModelTest extends DBUnitTestcase{
 
@@ -91,13 +90,15 @@ abstract class ModelTest extends DBUnitTestcase{
     		$cacheObj->reset();
     	}
     	
-    	MockSettings::setSettings('php-platform/persist', "dbHost", $host);
-    	MockSettings::setSettings('php-platform/persist', "dbPort", $port);
-    	MockSettings::setSettings('php-platform/persist', "dbName", self::$_databaseName);
-    	MockSettings::setSettings('php-platform/persist', "dbUsername", $username);
-    	MockSettings::setSettings('php-platform/persist', "dbPassword", $password);
-    	MockSettings::setSettings('php-platform/persist', "outputDateTimeFormat", "%Y-%m-%d %H:%i:%S");
-    	
+    	MockSettings::setSettings('php-platform/persist', "mysql.host", $host);
+    	MockSettings::setSettings('php-platform/persist', "mysql.port", $port);
+    	MockSettings::setSettings('php-platform/persist', "mysql.dbname", self::$_databaseName);
+    	MockSettings::setSettings('php-platform/persist', "mysql.username", $username);
+    	MockSettings::setSettings('php-platform/persist', "mysql.password", $password);
+    	MockSettings::setSettings('php-platform/persist', "mysql.outputDateFormat", "%Y-%m-%d");
+    	MockSettings::setSettings('php-platform/persist', "mysql.outputTimeFormat", "%H:%i:%S");
+    	MockSettings::setSettings('php-platform/persist', "mysql.outputDateTimeFormat", "%Y-%m-%d %H:%i:%S");
+    	 
     	$logFile = getenv('sqlLogFile');
     	if($logFile){
     		MockSettings::setSettings('php-platform/persist', "sqlLogFile", $logFile);
@@ -119,12 +120,6 @@ abstract class ModelTest extends DBUnitTestcase{
     }
     
     public static function tearDownAfterClass(){
-    	
-    	$transaction = TransactionManager::$transaction;
-    	while ($transaction != null){
-    		TransactionManager::abortTransaction();
-    		$transaction = TransactionManager::$transaction;
-    	}
     	
     	// create pdo without database
     	$_pdo = new PDO('mysql:host='.self::$_connectionParams['host'].';port='.self::$_connectionParams['port'], self::$_connectionParams['username'],self::$_connectionParams['password']);
