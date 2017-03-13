@@ -51,6 +51,15 @@ abstract class ModelTest extends DBUnitTestcase{
     }
     
     public static function setUpBeforeClass(){
+    	// close connections if any
+    	$reflectionProperty = new \ReflectionProperty('PhpPlatform\Persist\Connection\ConnectionFactory', 'connection');
+    	$reflectionProperty->setAccessible(true);
+    	$conection = $reflectionProperty->getValue(null);
+    	if($conection != null){
+    		$conection->close();
+    		$reflectionProperty->setValue(null,null);
+    	}
+    	
     	self::$_databaseName = "db".preg_replace('/[^0-9]/', '', microtime());
     	
     	// get connection parameters
