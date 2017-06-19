@@ -107,6 +107,8 @@ abstract class ModelTest extends DBUnitTestcase{
     	MockSettings::setSettings('php-platform/persist', "mysql.outputDateFormat", "%Y-%m-%d");
     	MockSettings::setSettings('php-platform/persist', "mysql.outputTimeFormat", "%H:%i:%S");
     	MockSettings::setSettings('php-platform/persist', "mysql.outputDateTimeFormat", "%Y-%m-%d %H:%i:%S");
+		
+    	MockSettings::setSettings("php-platform/session", "session.class", 'PhpPlatform\Tests\PersistUnit\SessionImpl');
     	 
     	$logFile = getenv('sqlLogFile');
     	if($logFile){
