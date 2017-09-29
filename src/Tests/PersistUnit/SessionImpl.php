@@ -51,7 +51,6 @@ class SessionImpl extends Cache implements Session{
 		if($flag & Session::RESET_DELETE_OLD){
 			parent::reset();
 		}
-		Reflection::setValue('PhpPlatform\Session\Factory', 'session', null, self::$instace);
 		return self::$instace;
 	}
 	
