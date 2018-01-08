@@ -14,6 +14,8 @@ use PhpPlatform\Mock\Config\MockSettings;
 use PhpPlatform\Config\SettingsCache;
 use PhpPlatform\JSONCache\Cache;
 use PhpPlatform\Errors\ErrorHandler;
+use PhpPlatform\Persist\Model;
+use PhpPlatform\Persist\TransactionManager;
 
 abstract class ModelTest extends DBUnitTestcase{
 
@@ -224,5 +226,175 @@ abstract class ModelTest extends DBUnitTestcase{
     	}
     	
     }
+    
+    /**   Template Tests for Model CRUD Operations , Override and provide the data through dataProvider **/
+    
+    /**
+     * @dataProvider dataProviderForCreate
+     *
+     * @param callable $pretest a callback function to be executed before the test
+     * @param callable $createFunc a callback function to create the model, should return the created model
+     * @param boolean $asSuperUser create using super user context
+     * @param callable $selectQuery a callback function which takes the created model and returns a sql query to get data
+     * @param array $expectedData expected column values for the newwly inserted row
+     * @param null|array $expectedException array with keys "class" and "message" of the exception , if an exception is expected
+     */
+    protected function _testCreate($pretest,$createFunc,$asSuperUser = false,$selectQuery = null,$expectedData = array(),$expectedException = null){
+    	if(is_callable($pretest)){
+    		call_user_func_array($pretest, array());
+    	}
+    	$exception = null;
+    	try{
+    		if($asSuperUser){
+    			$model = null;
+    			TransactionManager::executeInTransaction(function() use (&$model,$createFunc){
+    				$model = call_user_func_array($createFunc, array());
+    			},array(),true);
+    		}else {
+    			$model = call_user_func_array($createFunc, array());
+    		}
+    	}catch (\Exception $e){
+    		$exception = $e;
+    	}
+    	
+    	if(isset($expectedException)){
+    		$this->assertNotNull($exception);
+    		$this->assertEquals($expectedException['class'], get_class($exception));
+    		$this->assertStringStartsWith($expectedException['message'], $exception->getMessage());
+    	}else{
+    		$this->assertNull($exception);
+    		// validate db for creation
+    		$createdRow = $this->getConnection()->createQueryTable('model', call_user_func($selectQuery,$model))->getRow(0);
+    		foreach ($expectedData as $key=>$value){
+    			$this->assertEquals($value, $createdRow[$key]);
+    		}
+    	}
+    	
+    }
+    
+    
+    /**
+     *
+     * @dataProvider dataProviderForFind
+     *
+     * @param callable $pretest a callback function to be executed before the test
+     * @param callable $findFunc a callback to find function, should return models that found
+     * @param boolean $asSuperUser create using super user context
+     * @param array $expectedData expected rows
+     * @param null|array $expectedException array with keys "class" and "message" of the exception , if an exception is expected
+     */
+    protected function _testFind($pretest,$findFunc,$asSuperUser = false,$expectedData = array(),$expectedException = null){
+    	if(is_callable($pretest)){
+    		call_user_func_array($pretest, array());
+    	}
+    	$exception = null;
+    	try{
+    		if($asSuperUser){
+    			$models = null;
+    			TransactionManager::executeInTransaction(function() use (&$models,$findFunc){
+    				$models = call_user_func($findFunc);
+    			},array(),true);
+    		}else {
+    			$models = call_user_func($findFunc);
+    		}
+    	}catch (\Exception $e){
+    		$exception = $e;
+    	}
+    	
+    	if(isset($expectedException)){
+    		$this->assertNotNull($exception);
+    		$this->assertEquals($expectedException['class'], get_class($exception));
+    		$this->assertStringStartsWith($expectedException['message'], $exception->getMessage());
+    	}else{
+    		$this->assertNull($exception);
+    		// validate results
+    		$this->assertCount(count($expectedData), $models);
+    		for($i = 0;$i<count($models);$i++){
+    			$this->assertArraySubset($expectedData[$i], $models[$i]->getAttributes('*'));
+    		}
+    	}
+    }
+    
+    
+    /**
+     * @dataProvider dataProviderForUpdate
+     *
+     * @param callable $pretest a callback function to be executed before the test and it shoud return a valid model to update
+     * @param array $dataToUpdate data to be used for updation
+     * @param boolean $asSuperUser create using super user context
+     * @param callable $selectQuery a callback function which takes the created model and returns a sql query to get data
+     * @param array $expectedData expected column values for the newly inserted row
+     * @param null|array $expectedException array with keys "class" and "message" of the exception , if an exception is expected
+     */
+    protected function _testUpdate($pretest,$dataToUpdate,$asSuperUser = false,$selectQuery = null,$expectedData = array(),$expectedException = null){
+   		/**
+   		 * @var Model $model
+   		 */
+    	$model = call_user_func_array($pretest, array());
+    	$exception = null;
+    	try{
+    		if($asSuperUser){
+    			TransactionManager::executeInTransaction(function() use (&$model,$dataToUpdate){
+    				$model->setAttributes($dataToUpdate);
+    			},array(),true);
+    		}else {
+    			$model->setAttributes($dataToUpdate);
+    		}
+    	}catch (\Exception $e){
+    		$exception = $e;
+    	}
+    	
+    	if(isset($expectedException)){
+    		$this->assertNotNull($exception);
+    		$this->assertEquals($expectedException['class'], get_class($exception));
+    		$this->assertStringStartsWith($expectedException['message'], $exception->getMessage());
+    	}else{
+    		$this->assertNull($exception);
+    		// validate db for updation
+    		$createdRow = $this->getConnection()->createQueryTable('model', call_user_func($selectQuery,$model))->getRow(0);
+    		foreach ($expectedData as $key=>$value){
+    			$this->assertEquals($value, $createdRow[$key]);
+    		}
+    	}
+    }
+    
+    /**
+     * @dataProvider dataProviderForDelete
+     *
+     * @param callable $pretest a callback function to be executed before the test and it shoud return a valid model to delete
+     * @param boolean $asSuperUser create using super user context
+     * @param callable $selectQuery a callback function which takes the created model and returns a sql query to get data
+     * @param null|array $expectedException array with keys "class" and "message" of the exception , if an exception is expected
+     */
+    protected function _testDelete($pretest,$asSuperUser = false,$selectQuery = null,$expectedException = null){
+    	/**
+    	 * @var Model $model
+    	 */
+    	$model = call_user_func_array($pretest, array());
+    	$exception = null;
+    	try{
+    		if($asSuperUser){
+    			TransactionManager::executeInTransaction(function() use (&$model){
+    				$model->delete();
+    			},array(),true);
+    		}else {
+    			$model->delete();
+    		}
+    	}catch (\Exception $e){
+    		$exception = $e;
+    	}
+    	
+    	if(isset($expectedException)){
+    		$this->assertNotNull($exception);
+    		$this->assertEquals($expectedException['class'], get_class($exception));
+    		$this->assertStringStartsWith($expectedException['message'], $exception->getMessage());
+    	}else{
+    		$this->assertNull($exception);
+    		// validate db for deletion
+    		$this->assertEquals(0, $this->getConnection()->createQueryTable('model', call_user_func($selectQuery,$model))->getRowCount());
+    	}
+    }
+    
+    
 
 }

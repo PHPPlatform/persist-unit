@@ -5,7 +5,6 @@ namespace PhpPlatform\Tests\PersistUnit;
 use PhpPlatform\Session\Session;
 use PhpPlatform\JSONCache\Cache;
 use PhpPlatform\Persist\Reflection;
-use PhpPlatform\Session\Factory;
 
 class SessionImpl extends Cache implements Session{
 	

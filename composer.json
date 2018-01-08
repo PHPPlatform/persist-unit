@@ -25,7 +25,8 @@
 		"phpunit/dbunit" : "~1.4",
 		"php-platform/mock-config" : "~0.1",
 		"php-platform/errors" : "~0.1",
-		"php-platform/session" : "~0.1"
+		"php-platform/session" : "~0.1",
+		"php-platform/persist" : "~0.1"
 	},
 	"autoload" : {
 		"psr-4" : {
