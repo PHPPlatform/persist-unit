@@ -23,6 +23,13 @@ abstract class ModelTest extends DBUnitTestcase{
     private static $_databaseName = "";
     protected static $_pdo = null;
     private static $_connectionParams = null;
+    private static $errorLogDir = null;
+    
+    protected static $enablePersistenceTrace = true;
+    protected static $enableApplicationTrace = true;
+    protected static $enableHttpTrace = true;
+    protected static $enableSystemTrace = true;
+    
     
     /**
      * @return string[] of schema sql files to run before tests
@@ -130,6 +137,13 @@ abstract class ModelTest extends DBUnitTestcase{
     	
     	// start error handling
     	ErrorHandler::handleError();
+    	
+    	// create a temporary error log directory
+    	$errorLogDir = sys_get_temp_dir().'/icircle/accounts/errors/'.microtime(true);
+    	mkdir($errorLogDir,0777,true);
+    	chmod($errorLogDir, 0777);
+    	
+    	self::$errorLogDir = $errorLogDir;
     }
     
     public static function tearDownAfterClass(){
@@ -145,6 +159,51 @@ abstract class ModelTest extends DBUnitTestcase{
     	}
     	unset($result);
     	unset($_pdo);
+    	
+    	// delete error log directory
+    	rmdir(self::$errorLogDir);
+    }
+    
+    public function setUp(){
+        parent::setUp();
+        
+        $errorlogFile = self::$errorLogDir.'/'. md5($this->getName());
+        
+        $traces = [];
+        if(self::$enablePersistenceTrace){$traces['Persistence'] = $errorlogFile;}
+        if(self::$enableApplicationTrace){$traces['Application'] = $errorlogFile;}
+        if(self::$enableHttpTrace){$traces['Http'] = $errorlogFile;}
+        if(self::$enableSystemTrace){$traces['System'] = $errorlogFile;}
+        
+        // create an temporary error log
+        MockSettings::setSettings('php-platform/errors', 'traces', $traces);
+    }
+    
+    public function tearDown(){
+        parent::tearDown();
+        // display error log if any
+        $errorlogFile = self::$errorLogDir.'/'. md5($this->getName());
+        if(file_exists($errorlogFile)){
+            echo PHP_EOL.file_get_contents($errorlogFile).PHP_EOL;
+            unlink($errorlogFile);
+        }
+    }
+    
+    function clearErrorLog(){
+        $errorlogFile = self::$errorLogDir.'/'. md5($this->getName());
+        if(file_exists($errorlogFile)){
+            unlink($errorlogFile);
+        }
+    }
+    
+    function assertContainsAndClearLog($message){
+        $errorlogFile= self::$errorLogDir.'/'. md5($this->getName());
+        $log = "";
+        if(file_exists($errorlogFile)){
+            $log = file_get_contents($errorlogFile);
+        }
+        $this->assertContains($message, $log);
+        unlink($errorlogFile);
     }
     
     public function getSetUpOperation()
