@@ -184,7 +184,9 @@ abstract class ModelTest extends DBUnitTestcase{
         // display error log if any
         $errorlogFile = self::$errorLogDir.'/'. md5($this->getName());
         if(file_exists($errorlogFile)){
-            echo PHP_EOL.file_get_contents($errorlogFile).PHP_EOL;
+            if($this->hasFailed()){
+                echo PHP_EOL.file_get_contents($errorlogFile).PHP_EOL;
+            }
             unlink($errorlogFile);
         }
     }
