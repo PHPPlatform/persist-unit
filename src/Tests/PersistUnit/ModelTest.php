@@ -168,7 +168,10 @@ abstract class ModelTest extends DBUnitTestcase{
         parent::setUp();
         
         $errorlogFile = self::$errorLogDir.'/'. md5($this->getName());
-        
+        // create the error log file , and make it writable by www-data and test executor
+        file_put_contents($errorlogFile, '');
+        chmod($errorlogFile, 0777);
+
         $traces = [];
         if(self::$enablePersistenceTrace){$traces['Persistence'] = $errorlogFile;}
         if(self::$enableApplicationTrace){$traces['Application'] = $errorlogFile;}
