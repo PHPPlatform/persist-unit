@@ -197,7 +197,7 @@ abstract class ModelTest extends DBUnitTestcase{
     function clearErrorLog(){
         $errorlogFile = self::$errorLogDir.'/'. md5($this->getName());
         if(file_exists($errorlogFile)){
-            unlink($errorlogFile);
+            file_put_contents($errorlogFile,'');
         }
     }
     
@@ -208,7 +208,7 @@ abstract class ModelTest extends DBUnitTestcase{
             $log = file_get_contents($errorlogFile);
         }
         $this->assertContains($message, $log);
-        unlink($errorlogFile);
+        file_put_contents($errorlogFile,'');
     }
     
     public function getSetUpOperation()
