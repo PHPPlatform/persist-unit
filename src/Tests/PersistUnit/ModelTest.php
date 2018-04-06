@@ -61,13 +61,13 @@ abstract class ModelTest extends DBUnitTestcase{
     
     public static function setUpBeforeClass(){
     	// close connections if any
-    	$reflectionProperty = new \ReflectionProperty('PhpPlatform\Persist\Connection\ConnectionFactory', 'connection');
+    	$reflectionProperty = new \ReflectionProperty('PhpPlatform\Persist\Connection\ConnectionFactory', 'connections');
     	$reflectionProperty->setAccessible(true);
-    	$conection = $reflectionProperty->getValue(null);
-    	if($conection != null){
-    		$conection->close();
-    		$reflectionProperty->setValue(null,null);
+    	$conections = $reflectionProperty->getValue(null);
+    	foreach ($conections as $conection){
+    	    $conection->close();
     	}
+    	$reflectionProperty->setValue(null,[]);
     	
     	self::$_databaseName = "db".preg_replace('/[^0-9]/', '', microtime());
     	
@@ -108,14 +108,14 @@ abstract class ModelTest extends DBUnitTestcase{
     		$cacheObj->reset();
     	}
     	
-    	MockSettings::setSettings('php-platform/persist', "mysql.host", $host);
-    	MockSettings::setSettings('php-platform/persist', "mysql.port", $port);
-    	MockSettings::setSettings('php-platform/persist', "mysql.dbname", self::$_databaseName);
-    	MockSettings::setSettings('php-platform/persist', "mysql.username", $username);
-    	MockSettings::setSettings('php-platform/persist', "mysql.password", $password);
-    	MockSettings::setSettings('php-platform/persist', "mysql.outputDateFormat", "%Y-%m-%d");
-    	MockSettings::setSettings('php-platform/persist', "mysql.outputTimeFormat", "%H:%i:%S");
-    	MockSettings::setSettings('php-platform/persist', "mysql.outputDateTimeFormat", "%Y-%m-%d %H:%i:%S");
+    	MockSettings::setSettings('php-platform/persist', "dbConnections.default.params.host", $host);
+    	MockSettings::setSettings('php-platform/persist', "dbConnections.default.params.port", $port);
+    	MockSettings::setSettings('php-platform/persist', "dbConnections.default.params.dbname", self::$_databaseName);
+    	MockSettings::setSettings('php-platform/persist', "dbConnections.default.params.username", $username);
+    	MockSettings::setSettings('php-platform/persist', "dbConnections.default.params.password", $password);
+    	MockSettings::setSettings('php-platform/persist', "dbConnections.default.params.outputDateFormat", "%Y-%m-%d");
+    	MockSettings::setSettings('php-platform/persist', "dbConnections.default.params.outputTimeFormat", "%H:%i:%S");
+    	MockSettings::setSettings('php-platform/persist', "dbConnections.default.params.outputDateTimeFormat", "%Y-%m-%d %H:%i:%S");
 		
     	MockSettings::setSettings("php-platform/session", "session.class", 'PhpPlatform\Tests\PersistUnit\SessionImpl');
     	 
