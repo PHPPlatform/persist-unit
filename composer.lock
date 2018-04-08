@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d596ed76ea31ba0c3c2005556c58f236",
+    "content-hash": "cd5758f9f509e5722c9079ec4f26c639",
     "packages": [
         {
             "name": "doctrine/instantiator",
@@ -61,48 +61,6 @@
             "time": "2015-06-14T21:17:01+00:00"
         },
         {
-            "name": "php-platform/annotations",
-            "version": "v0.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PHPPlatform/annotations.git",
-                "reference": "f72f1359fa47da399a261f3e7b94e4e3e52ad331"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PHPPlatform/annotations/zipball/f72f1359fa47da399a261f3e7b94e4e3e52ad331",
-                "reference": "f72f1359fa47da399a261f3e7b94e4e3e52ad331",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.8"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "PhpPlatform\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
-                    "name": "Raghavendra K R",
-                    "email": "krraghavendra@yahoo.co.in",
-                    "homepage": "http://krraghavendra.in",
-                    "role": "Software Developer"
-                }
-            ],
-            "homepage": "https://github.com/PHPPlatform/annotations",
-            "keywords": [
-                "annotations",
-                "php-platform"
-            ],
-            "time": "2017-01-09T06:44:50+00:00"
-        },
-        {
             "name": "php-platform/config",
             "version": "v0.1.4",
             "source": {
@@ -148,20 +106,20 @@
         },
         {
             "name": "php-platform/errors",
-            "version": "v0.1.3",
+            "version": "v0.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPPlatform/errors.git",
-                "reference": "44e55463ef2ad61042be70e477323964f84fbb58"
+                "reference": "9ad0dde7729df630a0010cca6c680fdc305ed20e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPPlatform/errors/zipball/44e55463ef2ad61042be70e477323964f84fbb58",
-                "reference": "44e55463ef2ad61042be70e477323964f84fbb58",
+                "url": "https://api.github.com/repos/PHPPlatform/errors/zipball/9ad0dde7729df630a0010cca6c680fdc305ed20e",
+                "reference": "9ad0dde7729df630a0010cca6c680fdc305ed20e",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3",
+                "php": ">=5.4",
                 "php-platform/config": "~0.1"
             },
             "require-dev": {
@@ -190,7 +148,7 @@
                 "logging",
                 "php-platform"
             ],
-            "time": "2017-02-06T04:49:29+00:00"
+            "time": "2018-02-13T06:52:05+00:00"
         },
         {
             "name": "php-platform/json-cache",
@@ -281,56 +239,6 @@
                 "php-platform"
             ],
             "time": "2017-01-19T14:25:22+00:00"
-        },
-        {
-            "name": "php-platform/persist",
-            "version": "v0.1.11",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PHPPlatform/persist.git",
-                "reference": "8614c22cf34cc9dff4e82ed8a608df0a76410cd2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PHPPlatform/persist/zipball/8614c22cf34cc9dff4e82ed8a608df0a76410cd2",
-                "reference": "8614c22cf34cc9dff4e82ed8a608df0a76410cd2",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4",
-                "php-platform/annotations": "~0.1",
-                "php-platform/config": "~0.1",
-                "php-platform/errors": "~0.1",
-                "php-platform/json-cache": "~0.1",
-                "php-platform/session": "~0.1"
-            },
-            "require-dev": {
-                "php-platform/persist-unit": "v0.1.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "PhpPlatform\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
-                    "name": "Raghavendra K R",
-                    "email": "krraghavendra@yahoo.co.in",
-                    "homepage": "http://krraghavendra.in",
-                    "role": "Software Developer"
-                }
-            ],
-            "homepage": "https://github.com/PHPPlatform/persist",
-            "keywords": [
-                "OOP",
-                "PHP hibernate",
-                "orm",
-                "php-platform",
-                "relational Schema"
-            ],
-            "time": "2017-09-29T14:31:56+00:00"
         },
         {
             "name": "php-platform/session",
@@ -526,16 +434,16 @@
         },
         {
             "name": "phpspec/prophecy",
-            "version": "1.7.3",
+            "version": "1.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "e4ed002c67da8eceb0eb8ddb8b3847bb53c5c2bf"
+                "reference": "dfd6be44111a7c41c2e884a336cc4f461b3b2401"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/e4ed002c67da8eceb0eb8ddb8b3847bb53c5c2bf",
-                "reference": "e4ed002c67da8eceb0eb8ddb8b3847bb53c5c2bf",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/dfd6be44111a7c41c2e884a336cc4f461b3b2401",
+                "reference": "dfd6be44111a7c41c2e884a336cc4f461b3b2401",
                 "shasum": ""
             },
             "require": {
@@ -547,7 +455,7 @@
             },
             "require-dev": {
                 "phpspec/phpspec": "^2.5|^3.2",
-                "phpunit/phpunit": "^4.8.35 || ^5.7"
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.5"
             },
             "type": "library",
             "extra": {
@@ -585,7 +493,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2017-11-24T13:59:53+00:00"
+            "time": "2018-02-19T10:16:54+00:00"
         },
         {
             "name": "phpunit/dbunit",
@@ -1396,16 +1304,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.4.3",
+            "version": "v3.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "25c192f25721a74084272671f658797d9e0e0146"
+                "reference": "a42f9da85c7c38d59f5e53f076fe81a091f894d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/25c192f25721a74084272671f658797d9e0e0146",
-                "reference": "25c192f25721a74084272671f658797d9e0e0146",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/a42f9da85c7c38d59f5e53f076fe81a091f894d0",
+                "reference": "a42f9da85c7c38d59f5e53f076fe81a091f894d0",
                 "shasum": ""
             },
             "require": {
@@ -1450,20 +1358,20 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2018-01-03T07:37:34+00:00"
+            "time": "2018-04-03T05:14:20+00:00"
         },
         {
             "name": "webmozart/assert",
-            "version": "1.2.0",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozart/assert.git",
-                "reference": "2db61e59ff05fe5126d152bd0655c9ea113e550f"
+                "reference": "0df1908962e7a3071564e857d86874dad1ef204a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/2db61e59ff05fe5126d152bd0655c9ea113e550f",
-                "reference": "2db61e59ff05fe5126d152bd0655c9ea113e550f",
+                "url": "https://api.github.com/repos/webmozart/assert/zipball/0df1908962e7a3071564e857d86874dad1ef204a",
+                "reference": "0df1908962e7a3071564e857d86874dad1ef204a",
                 "shasum": ""
             },
             "require": {
@@ -1500,7 +1408,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2016-11-23T20:04:58+00:00"
+            "time": "2018-01-29T19:49:41+00:00"
         }
     ],
     "packages-dev": [],
